@@ -1,12 +1,12 @@
 {
   "fullname": "@nebulario/core-render-stateful-server",
-  "version": "",
+  "version": "1.0.0-master",
   "repository": {
     "url": "github.com:vicjicaman/core-render-stateful-server.git",
     "upstream": {
       "template-node": {
         "url": "github.com:vicjicaman/template-node.git",
-        "version": "1.0.0-master"
+        "version": "1.0.5-master"
       }
     }
   },
