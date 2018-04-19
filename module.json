@@ -1,0 +1,11 @@
+{
+  "fullname": "@nebulario/core-render-stateful-server",
+  "version": "",
+  "repository": {
+    "url": "github.com:vicjicaman/core-render-stateful-server.git",
+    "upstream": {}
+  },
+  "labels": {
+    "type": "npm"
+  }
+}
