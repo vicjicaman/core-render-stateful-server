@@ -1,5 +1,5 @@
 src
+static
+service
 webpack.config.js
 .babelrc
-.git
-.gitignore

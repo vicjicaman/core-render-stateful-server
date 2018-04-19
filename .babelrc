@@ -1,5 +1,7 @@
 {
   "plugins": [
+    ["dynamic-import-webpack"],
+    ["syntax-dynamic-import"],
     ["transform-runtime", {
       "helpers": false,
       "polyfill": false,
@@ -15,6 +17,6 @@
           "node": "current"
         }
       }
-    ], "stage-0", "stage-2"
+    ], "stage-0", "stage-2", "react"
   ]
 }
