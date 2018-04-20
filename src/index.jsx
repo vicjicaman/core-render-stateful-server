@@ -24,9 +24,8 @@ const renderHandler = async ({
   graph,
   watchers,
   res,
-  routerContext,
-  context
-}) => {
+  routerContext
+}, context) => {
 
   const {logger} = context;
 
@@ -39,13 +38,13 @@ const renderHandler = async ({
 
   res.status(200).write(renderHeader());
 
-  logger.debug("Run initial/mount request sagas");
+  logger.info("Run initial/mount request sagas");
   store.runSaga(rootSaga).done.then(() => {
 
-    logger.debug("Render graph data");
+    logger.info("Render graph data");
     getDataFromTree(AppRoot).then(() => {
 
-      logger.debug("Render store/graph to node stream");
+      logger.info("Render store/graph to node stream");
       const preloadedState = store.getState();
       const htmlSteam = renderToNodeStream(AppRoot);
       htmlSteam.pipe(res, {end: false});
@@ -68,15 +67,14 @@ const renderHandler = async ({
 
 }
 
-export const RenderStatefull = ({
+export const RenderStateful = ({
   App,
   url,
   reducers,
   watchers,
   req,
-  res,
-  context
-}) => {
+  res
+}, context) => {
 
   let routerContext = {};
   const {store, graph} = initState({reducers, url, req})
@@ -94,9 +92,8 @@ export const RenderStatefull = ({
     watchers,
     res,
     routerContext,
-    context,
     store,
     graph
-  })
+  }, context)
 
 }
