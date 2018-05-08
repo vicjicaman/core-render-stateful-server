@@ -24,7 +24,8 @@ const renderHandler = async ({
   graph,
   watchers,
   res,
-  routerContext
+  routerContext,
+  mounts
 }, context) => {
 
   const {logger} = context;
@@ -36,9 +37,9 @@ const renderHandler = async ({
     yield all(watchers.map(saga => fork(saga)));
   }
 
-  res.status(200).write(renderHeader());
+  res.status(200).write(renderHeader({mounts}));
 
-  logger.info("Run initial/mount request sagas");
+  logger.info("Run initial/mount request saga");
   store.runSaga(rootSaga).done.then(() => {
 
     logger.info("Render graph data");
@@ -49,7 +50,7 @@ const renderHandler = async ({
       const htmlSteam = renderToNodeStream(AppRoot);
       htmlSteam.pipe(res, {end: false});
       htmlSteam.on('end', () => {
-        res.write(renderFooter("", loadableState, preloadedState, graph.extract()));
+        res.write(renderFooter({css: "", loadableState, preloadedState, preloadedGraphState: graph.extract(), mounts}));
 
         if (routerContext.url) {
           res.redirect(routerContext.url);
@@ -69,15 +70,18 @@ const renderHandler = async ({
 
 export const RenderStateful = ({
   App,
-  url,
+  urls: {
+    graphql
+  },
   reducers,
   watchers,
   req,
-  res
+  res,
+  mounts
 }, context) => {
 
   let routerContext = {};
-  const {store, graph} = initState({reducers, url, req})
+  const {store, graph} = initState({reducers, url: graphql, req})
 
   const AppRoot = <ApolloProvider client={graph}>
     <Provider store={store}>
@@ -93,7 +97,8 @@ export const RenderStateful = ({
     res,
     routerContext,
     store,
-    graph
+    graph,
+    mounts
   }, context)
 
 }

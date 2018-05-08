@@ -1,29 +1,42 @@
 import fs from 'fs';
 
-//import CoreAppManifest from '@nebulario/core-dll-app/dist/manifest.json'
-//import ResourcesManifest from '@nebulario/nebu.io-resources/dist/manifest.json'
-const CoreAppManifest = [];
-const ResourcesManifest = [];
+const renderManifest = (mount, manifest, mode) => {
+  let res = '';
+  for (const key in manifest) {
+    const file = manifest[key];
+    if (key.endsWith('js') && mode === 'js') {
+      res += '<script src="/mounts/' + mount + '/' + file + '"></script>\n';
+    }
 
-export const renderHeader = () => {
+    if (key.endsWith('css') && mode === 'css') {
+      res += '<link rel="stylesheet" href="/mounts/' + mount + '/' + file + '"/>\n';
+    }
+  }
+  return res;
+}
 
-  const style = '<link rel="stylesheet" href="/static' + ResourcesManifest['/resources/index.css'] + '">';
+export const renderHeader = ({mounts}) => {
+
+  let mountRes = '';
+  for (const m in mounts) {
+    const {manifest} = mounts[m];
+    mountRes += renderManifest(m, manifest, 'css');
+  }
 
   return `<!DOCTYPE html>
     <html lang="en">
         <head>
             <meta charset="UTF-8">
             <title>App module</title>
-            ` + style + `
+            ` + mountRes + `
         </head>
         <body>
             <div id="root">
 `
 };
 
-export const renderFooter = (css, loadableState, preloadedState, preloadedGraphState) => {
+export const renderFooter = ({css, loadableState, preloadedState, preloadedGraphState, mounts}) => {
 
-  const local = JSON.parse(fs.readFileSync('./dist/manifest.json', 'utf8'));
   let res = `
             </div>
             <script>
@@ -34,12 +47,13 @@ export const renderFooter = (css, loadableState, preloadedState, preloadedGraphS
             </script>
             <style id="jss-server-side">${css}</style>`; //+JSON.stringify(CoreAppManifest)+JSON.stringify(ResourcesManifest);
 
-  res += '<script src="/static' + CoreAppManifest['/core-app/base.js'] + '"></script>';
-  res += '<script src="/static' + CoreAppManifest['/core-app/state.js'] + '"></script>';
-  res += '<script src="/static' + CoreAppManifest['/core-app/vendor.js'] + '"></script>';
-  res += '<script src="/static' + local['/app/app.js'] + '"></script>';
+  res += loadableState.getScriptTag();
+  for (const m in mounts) {
+    const {manifest} = mounts[m];
+    res += renderManifest(m, manifest, 'js');
+  }
 
-  res += `${loadableState.getScriptTag()}
+  res += `
         </body>
     </html>
 `;
