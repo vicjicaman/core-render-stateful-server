@@ -12,11 +12,11 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData
 });*/
 
-export default({uri, req}) => ({
+export default({url, req}) => ({
   graph: new ApolloClient({
     ssrMode: true,
     link: new HttpLink({
-      uri,
+      uri: url,
       credentials: 'include',
       fetch: fetch,
       headers: {
