@@ -38,8 +38,9 @@ export const renderHeader = ({mounts}) => {
 export const renderFooter = ({css, loadableState, preloadedState, preloadedGraphState, mounts}) => {
 
   let res = `
-            </div>
-            <script>
+</div>`;
+  res += loadableState.getScriptTag();
+  res += `<script>
                 // WARNING: See the following for security issues around embedding JSON in HTML!:
                 // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
                 window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
@@ -47,14 +48,14 @@ export const renderFooter = ({css, loadableState, preloadedState, preloadedGraph
             </script>
             <style id="jss-server-side">${css}</style>`; //+JSON.stringify(CoreAppManifest)+JSON.stringify(ResourcesManifest);
 
-  res += loadableState.getScriptTag();
+
   for (const m in mounts) {
     const {manifest} = mounts[m];
     res += renderManifest(m, manifest, 'js');
   }
 
   res += `
-      
+
         </body>
     </html>
 `;
