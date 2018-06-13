@@ -26,8 +26,9 @@ export const renderHeader = ({mounts}) => {
   return `<!DOCTYPE html>
     <html lang="en">
         <head>
-            <meta charset="UTF-8">
-            <title>App module</title>
+          <meta charset="utf-8"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+          <title>App module</title>
             ` + mountRes + `
         </head>
         <body>
