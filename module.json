@@ -1,4 +1,5 @@
 {
+  "type": "npm",
   "fullname": "@nebulario/core-render-stateful-server",
   "version": "1.0.21-local-ui-graph-dev",
   "repository": {
@@ -10,7 +11,5 @@
       }
     }
   },
-  "labels": {
-    "type": "npm"
-  }
+  "labels": []
 }
