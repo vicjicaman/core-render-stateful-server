@@ -1,6 +1,6 @@
 {
   "name": "@nebulario/core-render-stateful-server",
-  "version": "1.1.0-local-ui-graph-dev",
+  "version": "1.1.1-local-ui-graph-dev",
   "description": "Base for nodes",
   "main": "./dist/index.js",
   "repository": "github.com:vicjicaman/core-render-stateful-server.git",
