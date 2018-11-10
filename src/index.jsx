@@ -25,7 +25,8 @@ const renderHandler = async ({
   watchers,
   res,
   routerContext,
-  mounts
+  mounts,
+  config
 }, context) => {
 
   const {logger} = context;
@@ -50,7 +51,14 @@ const renderHandler = async ({
       const htmlSteam = renderToNodeStream(AppRoot);
       htmlSteam.pipe(res, {end: false});
       htmlSteam.on('end', () => {
-        res.write(renderFooter({css: "", loadableState, preloadedState, preloadedGraphState: graph.extract(), mounts}));
+        res.write(renderFooter({
+          css: "",
+          config,
+          loadableState,
+          preloadedState,
+          preloadedGraphState: graph.extract(),
+          mounts
+        }));
 
         if (routerContext.url) {
           res.redirect(routerContext.url);
@@ -59,6 +67,8 @@ const renderHandler = async ({
         }
 
       });
+    }).catch(function(error) {
+      console.log(error);
     });
 
   });
@@ -71,7 +81,8 @@ const renderHandler = async ({
 export const RenderStateful = ({
   App,
   urls: {
-    graphql
+    graphql,
+    events
   },
   reducers,
   watchers,
@@ -79,6 +90,8 @@ export const RenderStateful = ({
   res,
   mounts
 }, context) => {
+
+  console.log("GRAPHQL_CONNECT: " + graphql);
 
   let routerContext = {};
   const {store, graph} = initState({reducers, url: graphql, req})
@@ -98,6 +111,12 @@ export const RenderStateful = ({
     routerContext,
     store,
     graph,
+    config: {
+      urls: {
+        graphql,
+        events
+      }
+    },
     mounts
   }, context)
 

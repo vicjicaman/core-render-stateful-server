@@ -28,7 +28,7 @@ export const renderHeader = ({mounts}) => {
         <head>
           <meta charset="utf-8"/>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-          <title>App module</title>
+          <title>Repoflow</title>
             ` + mountRes + `
         </head>
         <body>
@@ -36,7 +36,14 @@ export const renderHeader = ({mounts}) => {
 `
 };
 
-export const renderFooter = ({css, loadableState, preloadedState, preloadedGraphState, mounts}) => {
+export const renderFooter = ({
+  css,
+  config,
+  loadableState,
+  preloadedState,
+  preloadedGraphState,
+  mounts
+}) => {
 
   let res = `
 </div>`;
@@ -44,11 +51,11 @@ export const renderFooter = ({css, loadableState, preloadedState, preloadedGraph
   res += `<script>
                 // WARNING: See the following for security issues around embedding JSON in HTML!:
                 // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
+                window.__CONFIG__ = ${JSON.stringify(config).replace(/</g, '\\u003c')}
                 window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
                 window.__APOLLO_STATE__ =  ${JSON.stringify(preloadedGraphState).replace(/</g, '\\u003c')}
             </script>
             <style id="jss-server-side">${css}</style>`; //+JSON.stringify(CoreAppManifest)+JSON.stringify(ResourcesManifest);
-
 
   for (const m in mounts) {
     const {manifest} = mounts[m];
