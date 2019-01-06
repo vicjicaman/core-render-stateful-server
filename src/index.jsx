@@ -1,5 +1,5 @@
 import React from 'react';
-import {renderToNodeStream} from 'react-dom/server';
+import {renderToNodeStream, renderToString} from 'react-dom/server';
 import {StaticRouter} from 'react-router-dom';
 import {getLoadableState} from 'loadable-components/server';
 import {Provider} from 'react-redux';
@@ -27,9 +27,9 @@ const renderHandler = async ({
   routerContext,
   mounts,
   config
-}, context) => {
+}, cxt) => {
 
-  const {logger} = context;
+  const {logger} = cxt;
 
   let loadableState = {};
   //loadableState = await getLoadableState(appWithRouter);
@@ -37,8 +37,6 @@ const renderHandler = async ({
   function* rootSaga() {
     yield all(watchers.map(saga => fork(saga)));
   }
-
-  res.status(200).write(renderHeader({mounts}));
 
   logger.info("Run initial/mount request saga");
   store.runSaga(rootSaga).done.then(() => {
@@ -48,25 +46,22 @@ const renderHandler = async ({
 
       logger.info("Render store/graph to node stream");
       const preloadedState = store.getState();
-      const htmlSteam = renderToNodeStream(AppRoot);
-      htmlSteam.pipe(res, {end: false});
-      htmlSteam.on('end', () => {
-        res.write(renderFooter({
-          css: "",
-          config,
-          loadableState,
-          preloadedState,
-          preloadedGraphState: graph.extract(),
-          mounts
-        }));
-
-        if (routerContext.url) {
-          res.redirect(routerContext.url);
-        } else {
-          res.send();
-        }
-
+      const htmlSteam = renderHeader({mounts}) + renderToString(AppRoot) + renderFooter({
+        css: "",
+        config,
+        loadableState,
+        preloadedState,
+        preloadedGraphState: graph.extract(),
+        mounts
       });
+
+      if (routerContext.url) {
+        res.redirect(routerContext.url);
+      } else {
+        res.status(200);
+        res.send(htmlSteam);
+      }
+
     }).catch(function(error) {
       console.log(error);
     });
@@ -89,9 +84,7 @@ export const RenderStateful = ({
   req,
   res,
   mounts
-}, context) => {
-
-  console.log("GRAPHQL_CONNECT: " + graphql);
+}, cxt) => {
 
   let routerContext = {};
   const {store, graph} = initState({reducers, url: graphql, req})
@@ -118,6 +111,6 @@ export const RenderStateful = ({
       }
     },
     mounts
-  }, context)
+  }, cxt)
 
 }
