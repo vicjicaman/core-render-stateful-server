@@ -32,7 +32,7 @@ const renderHandler = async ({
   const {logger} = cxt;
 
   let loadableState = {};
-  //loadableState = await getLoadableState(appWithRouter);;
+  //loadableState = await getLoadableState(appWithRouter);;;
 
   function* rootSaga() {
     yield all(watchers.map(saga => fork(saga)));
