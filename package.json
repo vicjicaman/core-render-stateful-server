@@ -1,6 +1,6 @@
 {
   "name": "@nebulario/core-render-stateful-server",
-  "version": "1.0.0-hoist-dev-init-dev",
+  "version": "1.0.0-hoist-dev-init-prod",
   "description": "Base for nodes",
   "main": "./dist/index.js",
   "repository": "github.com:vicjicaman/core-render-stateful-server.git",
