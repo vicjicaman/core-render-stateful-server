@@ -1,6 +1,6 @@
 {
   "name": "@nebulario/core-render-stateful-server",
-  "version": "1.70.0-separate-render-dev",
+  "version": "1.70.1-separate-render-prod",
   "description": "Base for nodes",
   "main": "./dist/index.js",
   "repository": "github.com:vicjicaman/core-render-stateful-server.git",
