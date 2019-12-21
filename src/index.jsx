@@ -38,13 +38,13 @@ const renderHandler = async ({
     yield all(watchers.map(saga => fork(saga)));
   }
 
-  logger.info("Run initial/mount request saga");
+  logger.debug("Run initial/mount request saga");
   store.runSaga(rootSaga).done.then(() => {
 
-    logger.info("Render graph data");
+    logger.debug("Render graph data");
     getDataFromTree(AppRoot).then(() => {
 
-      logger.info("Render store/graph to node stream");
+      logger.debug("Render store/graph to node stream");
       const preloadedState = store.getState();
       const htmlSteam = renderHeader({mounts}) + renderToString(AppRoot) + renderFooter({
         css: "",
