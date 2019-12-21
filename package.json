@@ -37,7 +37,7 @@
     "redux-saga": "^0.16.0",
     "uglifyjs-webpack-plugin": "^1.1.2",
     "webpack": "^3.8.1",
-    "webpack-bundle-analyzer": "^2.9.1",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-node-externals": "^1.6.0"
   },
   "scripts": {
